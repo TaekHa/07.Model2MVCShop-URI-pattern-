@@ -27,7 +27,7 @@ function fncGetList(currentPage){
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/listProduct.do?menu=${menu}" method="post">
+<form name="detailForm" action="/product/listProduct?menu=${menu}" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -110,7 +110,7 @@ function fncGetList(currentPage){
 				<td></td>
 				<td align="left">
 					<c:if test = "${product.proTranCode eq '0' || empty product.proTranCode}">
-						<a href="/getProduct.do?prodNo=${product.prodNo }&menu=${menu}">${product.prodName }</a>
+						<a href="/product/getProduct?prodNo=${product.prodNo }&menu=${menu}">${product.prodName }</a>
 					</c:if>
 					<c:if test = "${!empty product.proTranCode && product.proTranCode ne '0' }">
 						${product.prodName }
@@ -137,7 +137,7 @@ function fncGetList(currentPage){
 							<c:when test="${product.proTranCode eq '1'}">
 								구매완료
 								<c:if test="${menu eq 'manage' }">
-									<a href="/updateTranCodeByProd.do?prodNo=${product.prodNo }&tranCode=2&currentPage=${ resultPage.currentPage}">배송하기</a>
+									<a href="/purchase/updateTranCodeByProd?prodNo=${product.prodNo }&tranCode=2&currentPage=${ resultPage.currentPage}">배송하기</a>
 								</c:if>
 							</c:when>
 							<c:when test="${product.proTranCode eq '2'}">

@@ -2,7 +2,6 @@ package com.model2.mvc.web.product;
 
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,17 +12,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
-import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 
 
 //==> 회원관리 Controller
 @Controller
+@RequestMapping("/product/*")
 public class ProductController {
 	
 	///Field
@@ -46,21 +46,29 @@ public class ProductController {
 	//@Value("#{commonProperties['pageSize'] ?: 2}")
 	int pageSize;
 	
+	@RequestMapping( value="addProduct", method=RequestMethod.GET )
+	public String addUser() throws Exception{
 	
-	@RequestMapping("/addProduct.do")
+		System.out.println("/user/addProduct : GET");
+		
+		return "redirect:/product/addProductView.jsp";
+	}
+	
+	
+	@RequestMapping(value = "addProduct", method=RequestMethod.POST)
 	public String addProduct( @ModelAttribute("product") Product product ) throws Exception {
 
-		System.out.println("/addProduct.do");
+		System.out.println("/addProduct : POST");
 		//Business Logic
 		productService.addProduct(product);
 		
 		return "forward:/product/addProduct.jsp";
 	}
 	
-	@RequestMapping("/getProduct.do")
+	@RequestMapping(value="getProduct", method=RequestMethod.GET)
 	public String getProduct( @RequestParam("prodNo") int prodNo , @RequestParam("menu") String menu, Model model ) throws Exception {
 		
-		System.out.println("/getProduct.do");
+		System.out.println("/getProduct : GET");
 		//Business Logic
 		Product product = productService.getProduct(prodNo);
 		// Model 과 View 연결
@@ -68,16 +76,16 @@ public class ProductController {
 		model.addAttribute("menu", menu);
 		
 		if(menu.equals("manage")) {
-			return "forward:/updateProductView.do";
+			return "forward:/product/updateProduct";
 		}else {
 			return "forward:/product/getProduct.jsp";
 		}
 	}
 	
-	@RequestMapping("/updateProductView.do")
+	@RequestMapping(value="updateProduct", method=RequestMethod.GET)
 	public String updateProductView( @RequestParam("prodNo") int prodNo , Model model ) throws Exception{
 
-		System.out.println("/updateProductView.do");
+		System.out.println("/updateProduct : GET");
 		//Business Logic
 		Product product = productService.getProduct(prodNo);
 		// Model 과 View 연결
@@ -86,22 +94,22 @@ public class ProductController {
 		return "forward:/product/updateProduct.jsp";
 	}
 	
-	@RequestMapping("/updateProduct.do")
+	@RequestMapping(value="updateProduct", method=RequestMethod.POST)
 	public String updateProduct( @ModelAttribute("product") Product product ,@RequestParam("prodNo") int prodNo, Model model , HttpSession session) throws Exception{
 
-		System.out.println("/updateProduct.do");
+		System.out.println("/updateProduct : POST");
 		//Business Logic
 		productService.updateProduct(product);
 		
 		model.addAttribute("product", product);
 		
-		return "redirect:/getProduct.do?prodNo="+prodNo+"&menu=ok";
+		return "redirect:/product/getProduct?prodNo="+prodNo+"&menu=ok";
 	}
 	
-	@RequestMapping("/listProduct.do")
+	@RequestMapping(value="listProduct")
 	public String listProduct( @ModelAttribute("search") Search search , @RequestParam("menu") String menu, Model model , HttpServletRequest request) throws Exception{
 		
-		System.out.println("/listProduct.do");
+		System.out.println("/listProduct : GET/POST");
 		
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);

@@ -127,7 +127,7 @@
 							<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 						</td>
 						<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-							<a href="/addPurchaseView.do?prodNo=${product.prodNo}">구매</a>
+							<a href="/purchase/addPurchase?prodNo=${product.prodNo}">구매</a>
 						</td>
 						<td width="14" height="23">
 							<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -140,10 +140,10 @@
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
 						<c:if test = "${menu.equals('ok') }">
-							<a href="/listProduct.do?menu=manage">확인</a>
+							<a href="/product/listProduct?menu=manage">확인</a>
 						</c:if>
 						<c:if test = "${!menu.equals('ok') }">
-							<a href="/listProduct.do?menu=${menu}">이전</a>
+							<a href="/product/listProduct?menu=${menu}">이전</a>
 						</c:if>
 					</td>
 					<td width="14" height="23">
