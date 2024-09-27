@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PurchaseMapper">
+ 	
+ 	
+	<resultMap id="purchaseSelectMap" type="purchase">
+	
+		<result property="tranNo" column="tran_no" jdbcType="NUMERIC"/>
+		<result property="paymentOption" column="payment_option" jdbcType="CHAR"/>
+		<result property="receiverName" column="receiver_name" jdbcType="VARCHAR"/>
+		<result property="receiverPhone" column="receiver_phone" jdbcType="VARCHAR"/>
+		<result property="divyAddr" column="demailaddr" jdbcType="VARCHAR"/>
+		<result property="divyRequest" column="dlvy_request" jdbcType="VARCHAR"/>
+		<result property="tranCode" column="tran_status_code" jdbcType="CHAR"/>
+		<result property="orderDate" column="order_data" jdbcType="DATE"/>
+		<result property="divyDate" column="dlvy_date" jdbcType="VARCHAR"/>
+		<association property="purchaseProd" column="prod_no" select="ProductMapper.getProduct"/>
+		<association property="buyer" column="buyer_id" select="UserMapper.getUser"/>
+				
+	</resultMap>
+	
+	<!-- SQL : INSERT -->
+	<insert id="addPurchase" parameterType="purchase">
+		INSERT 
+		INTO transaction(tran_no, prod_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, tran_status_code, order_data, dlvy_date)
+		VALUES (
+					seq_transaction_tran_no.NEXTVAL,
+					#{purchaseProd.prodNo:INTEGER},
+					#{buyer.userId:VARCHAR},
+					#{paymentOption:CHAR},
+					#{receiverName:VARCHAR},
+					#{receiverPhone:VARCHAR},
+					#{divyAddr:VARCHAR},
+					#{divyRequest:VARCHAR},
+					'1',
+					SYSDATE,
+					#{divyDate:DATE} )
+	</insert>
+	 
+	 <!-- SQL : SELECT ONE -->
+	 
+	 <select id="getPurchase" parameterType="int" resultMap="purchaseSelectMap">
+  		SELECT 
+		prod_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, dlvy_date, order_data, tran_status_code, tran_no
+		FROM transaction
+		WHERE tran_no = #{tranNo}
+  	</select>
+  	
+  	<select 	id="getPurchaseByProd"	parameterType="int"	 resultMap="purchaseSelectMap">
+  		SELECT 
+		prod_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, dlvy_date, order_data, tran_status_code, tran_no
+		FROM transaction
+		WHERE prod_no = #{prodNo}
+	 </select>
+  	
+	<select id="findPurchase" parameterType="int" resultMap="purchaseSelectMap">
+		select
+		t.TRAN_NO tranNo,
+		<!-- t.prod_no prodNo, -->
+		t.buyer_id buyer,
+		t.PAYMENT_OPTION paymentOption,
+		t.RECEIVER_NAME receiverName,
+		t.RECEIVER_PHONE receiverPhone,
+		t.demailaddr dlvyAddr,
+		t.DLVY_REQUEST dlvyRequest,
+		t.TRAN_STATUS_CODE tranCode,
+		t.ORDER_DATA orderDate,
+		t.DLVY_DATE dlvyDate,
+		
+		p.PROD_NO prod_no,
+		p.PROD_NAME prod_name,
+		p.PROD_DETAIL prod_detail,
+		p.MANUFACTURE_DAY manufacture_day,
+		p.PRICE price,
+		p.IMAGE_FILE image_file,
+		p.REG_DATE prod_reg_date,
+		t.TRAN_STATUS_CODE TRAN_STATUS_CODE,
+		
+		u.USER_ID buyer_id,
+		u.USER_NAME userName,
+		u.PASSWORD password,
+		u.ROLE role,
+		u.SSN ssn,
+		u.CELL_PHONE cell_phone,
+		u.ADDR addr,
+		u.EMAIL email,
+		u.REG_DATE user_reg_date
+				
+		from TRANSACTION t, PRODUCT p, USERS u
+		where t.prod_no = p.prod_no AND t.buyer_id = u.user_id
+		AND t.TRAN_NO=#{tranNo}
+	</select>
+	
+		<select id="findPurchaseByProd" parameterType="int" resultMap="purchaseSelectMap">
+		select
+		t.TRAN_NO tranNo,
+		<!-- t.prod_no prodNo, -->
+		t.buyer_id buyer,
+		t.PAYMENT_OPTION paymentOption,
+		t.RECEIVER_NAME receiverName,
+		t.RECEIVER_PHONE receiverPhone,
+		t.demailaddr dlvyAddr,
+		t.DLVY_REQUEST dlvyRequest,
+		t.TRAN_STATUS_CODE tranCode,
+		t.ORDER_DATA orderDate,
+		t.DLVY_DATE dlvyDate,
+		
+		p.PROD_NO prod_no,
+		p.PROD_NAME prod_name,
+		p.PROD_DETAIL prod_detail,
+		p.MANUFACTURE_DAY manufacture_day,
+		p.PRICE price,
+		p.IMAGE_FILE image_file,
+		p.REG_DATE prod_reg_date,
+		t.TRAN_STATUS_CODE TRAN_STATUS_CODE,
+		
+		u.USER_ID buyer_id,
+		u.USER_NAME userName,
+		u.PASSWORD password,
+		u.ROLE role,
+		u.SSN ssn,
+		u.CELL_PHONE cell_phone,
+		u.ADDR addr,
+		u.EMAIL email,
+		u.REG_DATE user_reg_date
+				
+		from TRANSACTION t, PRODUCT p, USERS u
+		where t.prod_no = p.prod_no AND t.buyer_id = u.user_id
+		AND p.prod_no=#{prodNo}
+	</select>
+	 
+
+	 
+	 <!-- SQL : UPDATE -->
+	 <update	id="updatePurchase"	parameterType="java.util.Map" >
+	   	UPDATE transaction
+	   	<set>
+	   		payment_option 	= #{paymentOption} ,
+			receiver_name	= #{receiverName},
+			receiver_phone = #{receiverPhone} ,
+			demailaddr	 =	#{divyAddr},
+			dlvy_request = #{divyRequest},
+			dlvy_date = #{divyDate}
+	   	</set>
+	   	WHERE tran_no = #{tranNo}
+	 </update>
+	 
+	 <update	id="updateTranCode"	parameterType="java.util.Map" >
+	   	UPDATE transaction 
+	   	<set>
+	   		tran_status_code = #{tranStatusCode} ,
+	   	</set>
+	   	WHERE tran_no = #{purchase.tranNo}
+	 </update>
+		 
+	<!-- SQL : SELECT LIST -->
+<select id="getPurchaseList" parameterType="java.util.Map" resultMap="purchaseSelectMap">
+  		SELECT *
+  		FROM ( SELECT inner_table.*, ROWNUM AS row_seq
+  						FROM ( SELECT t.tran_no, t.buyer_id, t.receiver_name, t.receiver_phone, p.prod_no, t.order_data, t.tran_status_code 
+										FROM transaction t, product p, users u 
+										WHERE t.prod_no = p.prod_no 
+										AND t.buyer_id = u.user_id 
+										AND u.user_id = #{buyerId}
+										ORDER BY tran_no  ) inner_table
+  						WHERE ROWNUM <![CDATA[<=]]> #{search.currentPage}*#{search.pageSize} )
+  		WHERE row_seq BETWEEN (#{search.currentPage}-1)*#{search.pageSize}+1
+  		AND #{search.currentPage}*#{search.pageSize}
+</select>
+	 	<!--  위 두번째 subQuery 의  
+	 			WHERE ROWNUM &lt;= #{endRowNum} ) 는
+	 			WHERE ROWNUM <= #{endRowNum} ) 의미이며..
+	 			< 는 keyword 로 &lt; 를	사용.
+	 			
+	 			<![CDATA[  ~~~  ]]> 를 이용하여 아래와 같이 사용  할 수 있다.
+	 			CDATA ==> Character Data 의 의미 Java 에서 \n 같은 특수문자 처리  
+
+				WHERE ROWNUM <![CDATA[ <=]]> #{endRowNum} )
+		-->
+	
+	<!-- SQL : SELECT ROW Count -->	 
+	 <select  id="getTotalCount"  parameterType="String"	 resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(	SELECT t.tran_no, p.prod_no, t.order_data, t.tran_status_code 
+						FROM transaction t, product p, users u 
+										WHERE t.prod_no = p.prod_no 
+										AND t.buyer_id = u.user_id 
+										AND u.user_id = #{buyerId}
+										ORDER BY tran_no ) countTable											
+	 </select>
+	 
+</mapper>

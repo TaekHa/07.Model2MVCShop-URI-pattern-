@@ -93,9 +93,9 @@ public class ProductController {
 		
 		return "forward:/product/updateProduct.jsp";
 	}
-	
+//	@RequestParam("prodNo") int prodNo
 	@RequestMapping(value="updateProduct", method=RequestMethod.POST)
-	public String updateProduct( @ModelAttribute("product") Product product ,@RequestParam("prodNo") int prodNo, Model model , HttpSession session) throws Exception{
+	public String updateProduct( @ModelAttribute("product") Product product , Model model , HttpSession session) throws Exception{
 
 		System.out.println("/updateProduct : POST");
 		//Business Logic
@@ -103,7 +103,7 @@ public class ProductController {
 		
 		model.addAttribute("product", product);
 		
-		return "redirect:/product/getProduct?prodNo="+prodNo+"&menu=ok";
+		return "redirect:/product/getProduct?prodNo="+product.getProdNo()+"&menu=ok";
 	}
 	
 	@RequestMapping(value="listProduct")
