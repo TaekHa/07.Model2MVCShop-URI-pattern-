@@ -58,7 +58,7 @@ public class ProductController {
 	@RequestMapping(value = "addProduct", method=RequestMethod.POST)
 	public String addProduct( @ModelAttribute("product") Product product ) throws Exception {
 
-		System.out.println("/addProduct : POST");
+		System.out.println("/user/addProduct : POST");
 		//Business Logic
 		productService.addProduct(product);
 		
@@ -68,7 +68,7 @@ public class ProductController {
 	@RequestMapping(value="getProduct", method=RequestMethod.GET)
 	public String getProduct( @RequestParam("prodNo") int prodNo , @RequestParam("menu") String menu, Model model ) throws Exception {
 		
-		System.out.println("/getProduct : GET");
+		System.out.println("/product/getProduct : GET");
 		//Business Logic
 		Product product = productService.getProduct(prodNo);
 		// Model °ú View ¿¬°á

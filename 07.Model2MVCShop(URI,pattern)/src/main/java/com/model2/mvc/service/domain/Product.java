@@ -21,7 +21,7 @@ public class Product {
 		return proTranCode;
 	}
 	public void setProTranCode(String proTranCode) {
-		this.proTranCode = proTranCode;
+		this.proTranCode = proTranCode.trim();
 	}
 	public String getFileName() {
 		return fileName;
@@ -68,8 +68,8 @@ public class Product {
 
 	// Override
 	public String toString() {
-		return "ProductVO : [fileName]" + fileName
+		return "Product : [fileName]" + fileName
 				+ "[manuDate]" + manuDate+ "[price]" + price + "[prodDetail]" + prodDetail
-				+ "[prodName]" + prodName + "[prodNo]" + prodNo;
+				+ "[prodName]" + prodName + "[prodNo]" + prodNo+"[tranCode]"+proTranCode;
 	}	
 }
